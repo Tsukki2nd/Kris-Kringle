@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  color: #0a0a0a;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: -0.005em;
+}
+
+/* Festive picture background (public/bg-christmas.svg).
+   To use your own photo: put it in /public (e.g. bg.jpg) and change the url() below.
+   The white gradient on top keeps text readable over busy photos. */
+body {
+  background-color: #fafafa;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0) 45%),
+    url("/bg-christmas.svg");
+  background-size: cover, cover;
+  background-position: center bottom, center bottom;
+  background-repeat: no-repeat;
+}
+
+::selection {
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0a0a0a;
+}
+
+@keyframes snowfall {
+  from {
+    transform: translate3d(0, -8vh, 0);
+  }
+  to {
+    transform: translate3d(var(--drift, 20px), 110vh, 0);
+  }
+}
+
+.snowflake {
+  position: absolute;
+  top: 0;
+  border-radius: 9999px;
+  animation-name: snowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snowflake {
+    animation: none;
+    opacity: 0;
+  }
+}

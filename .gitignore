@@ -1,0 +1,7 @@
+node_modules
+.next
+out
+.env.local
+.firebase
+*.tsbuildinfo
+next-env.d.ts

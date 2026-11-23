@@ -1,0 +1,31 @@
+rules_version = '2';
+
+// NOTE: This app has no user authentication (participants identify by name + PIN),
+// so the browser must be allowed to read and write `participants`. These rules
+// therefore validate the *shape* of data and block every other collection,
+// but they cannot stop a determined person from using the Firebase SDK directly.
+// That is acceptable for a casual office party; do not store anything sensitive.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function validParticipant() {
+      let d = request.resource.data;
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && d.normalizedName is string && d.normalizedName.size() > 0
+        && d.wishlist is string && d.wishlist.size() <= 1000
+        && d.hasSpun is bool
+        && d.isDrawn is bool
+        && (d.pin == null || (d.pin is string && d.pin.matches('^[0-9]{4}$')));
+    }
+
+    match /participants/{participantId} {
+      allow read: if true;
+      allow create, update: if validParticipant();
+      allow delete: if true;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
